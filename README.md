@@ -14,10 +14,10 @@
 |---|---|
 | Target | a table of landings for the covenant hop, the KCC-20 mint and the tic-tac-toe guest, with the desk template mass and fee estimate, at the no-lane baseline, lane-on at 1×, lane-on with the mix held at 2×, and lane at zero; and our lane back to zero ([target plan](https://github.com/STP-KAS/tn10-target-plan/blob/main/plan/PLAN.md), pre-run 26 card). Met means the table exists and the lane stopped |
 | The change | one held 2× fee step: the mix (families and mints) at 920 = 2 × our lane's 460 in HOLD-2 only (written before the arm; [plan/PLAN.md](plan/PLAN.md)) |
-| Met or not met | open: written after RETURN |
+| Met or not met | **met**: the table is [counts/chain/FEE-STEP.md](counts/chain/FEE-STEP.md) and our lane stopped at its zero (last submit-OK minute 02:37 UTC, zero 02:37:59 UTC). Three-part line also held: 14,264 hops, 60 of 60 mints, 16 of 16 guest carriers; no component fell behind ([LESSONS](logs/LESSONS.md)) |
 | Retry count | 0 (gate: [pre-run 25](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-25) met) |
 | Core tags | 1 (mempool rotation, issue #1146: a light 60-second id sample, not a full dump) |
-| Status | in-progress |
+| Status | done (2026-11-14, open 02:25:46Z, RETURN closed 02:50:24Z, runner end 02:56:14Z) |
 
 **Where this starts.** From [pre-run 25's locks/LOCKED.md](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-25/blob/main/locks/LOCKED.md), copied here as [locks/LOCKED.md](locks/LOCKED.md), with a pre-run 26 section added at the end. Pre-runs 1 to 23 are in [tn-master](https://github.com/STP-KAS/tn-master).
 

@@ -835,3 +835,15 @@ Pre-run 25 is met. Everything locked above stays. Pre-run 26 is the card's held 
 ## Locked during pre-run 26
 
 When a fix works, append it here, one block per fix: UTC time, what failed or worked, what was changed, why that change stays.
+
+```
+- 2026-11-14T02:01Z-02:03Z (rehearsal only): two rehearsal starts held (no-public-node, genesis-held) because the rehearsal
+  folder got the real kit and genesis script. Rebuilt from the last rehearsal's kit and six folders plus the changed run
+  files; p26-a passed 02:04-02:24Z. Stays: a new rehearsal copies the last rehearsal's stand-ins, then overlays changes.
+- Worked, no fix: open checklist (candidates.json copied, git identity on every clone) - no hold at the open or the arm.
+- Worked, no fix: the fee step through control/ESC-RATE (kit27, both tiers live) - families and mints at 920 in HOLD-2 only.
+- 2026-11-14T02:56Z: FEE-STEP.md generator (tools/post/feestep.mjs) reads template lane mass as mass - rest_mass (the sampler's
+  heavy field is a count). Stays.
+- Result (after the tail): met; lane stopped at its zero; first-behind rule (xxix) found no component behind. Key 0 ended at
+  2,156 coins over 3 tKAS, under REVIEW-01's 2,500 line: the next pre-run splits (logged) before its open.
+```

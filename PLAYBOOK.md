@@ -19,11 +19,11 @@ Desk and Mini at least 100 GB free, box at least 20 GB. Below that nothing start
 
 Filled before `PRE-RUN-OPEN` (UTC):
 
-- Open-checklist lines from pre-run 25, done up front: the desk's private candidate list copied into the pre-run 26 run directory; Mini's pre-run 26 clone has its git identity set (checked 02:26Z).
+- Open-checklist lines from pre-run 25, done up front: the desk's private candidate list copied into the pre-run 26 run directory; Mini's pre-run 26 clone has its git identity set (checked about 02:25Z).
 - Coin split on key 0 (logged, key 0's own big coins, no mining-wallet move), 2026-11-14T01:49:01Z: 29 transactions, 1,160 new coins from 28,789.99 tKAS, fees 0.513068 tKAS.
 - Genesis coins, 2026-11-14T01:49:33Z: key 0 gave one coin of 25 tKAS each to keys 3, 4, 5, 6, 8, 9, 10 and 11 and 34 coins (849.92 tKAS) to the mint key (cap 60), fees 0.102312 tKAS.
 - Guest issuer topped up from key 0, 2026-11-14T01:50:38Z: two coins of 100 tKAS (one bootstrap per match), fees 0.019524 tKAS.
-- `BUDGET_CHECK` (read-only, 02:27Z): pass. Key 0 104,128 usable tKAS in 3,573 coins over 3 tKAS (line 2,500); projected end 49,408 tKAS against 18,000 + 8,000. Lane pile (key 16) 177 coins, 69,219 tKAS.
+- `BUDGET_CHECK` (read-only, about 02:25Z): pass. Key 0 104,128 usable tKAS in 3,573 coins over 3 tKAS (line 2,500); projected end 49,408 tKAS against 18,000 + 8,000. Lane pile (key 16) 177 coins, 69,219 tKAS.
 - Sync and peers: desk node testnet-10, synced, UTXO index, 2.1.0, DAA moved 88 in 10 s, 8 peers (01:57Z); Mini node testnet-10, synced, UTXO index, 2.1.0, DAA moved 192 in 20 s, 8 peers, tip age under 1 s (01:58Z).
 - Disk: desk 368 GB free, Mini 297 GB free, box 102 GB free; all over the floor.
 - Guest kit gate, `arm-guest.sh --dry` against the desk node, 2026-11-14T01:58:53Z: `GUEST gate ok mode=dry` (nothing submitted).
@@ -33,3 +33,10 @@ Filled before `PRE-RUN-OPEN` (UTC):
 ## Offline rehearsal before the open (fake node, fake sender and mint, our heavy lane against the fake payment-key node only, local bare origin; both guest matches in dry mode: the kit's read-only gate against the desk node, nothing sent)
 
 - p26-a, 02:04–02:24 UTC, 2-minute segments: passed on the final runner, guest and kit files. Two earlier starts held before any step (02:01Z `no-public-node` and 02:03Z `genesis-held`) because the rehearsal folder had been given the real kit and the real genesis script instead of the rehearsal stand-ins; fixed in the rehearsal folder only, nothing in the run files changed. In the passing start: genesis of nine (fake), families 8 of 8, lane up at N=0, `LANE_SET` BASE esc 100 / HOLD-1 N 8 ready 8 at 460 esc 100 / HOLD-2 N 8 ready 8 at 460 esc 920 with guest B go / HOLD-3 N 0 esc 100, the lane's last submit in HOLD-2's last minute and none after its zero, guest match A gate and stop at the baseline, match B gate at HOLD-2 and its stop at RETURN, all step files, TIMELINE, MEMPOOL, MINT, TARGET and METHOD rendered; runner exit 0. The rehearsal's counts are fake and are not results.
+
+## After the run
+
+- `PRE-RUN-OPEN` 2026-11-14T02:25:46Z (no hold); `MINI-ARMED` 02:26:08Z (no hold). Bot started before the run.
+- Genesis 9 of 9 at 02:27:54Z; families 8 of 8; lane up at N=0; `LANE_SET` base 02:28:59Z, lane on 1× 02:31:59Z, mix 920 + guest B go 02:34:59Z, lane zero 02:37:59Z, drain 02:40:59Z. Guest A 8 of 8 by 02:28:37Z, guest B 8 of 8 by 02:35:31Z; mint line at its cap (60) 02:43:40Z; bot HOLD-4 minute 02:45 (39 of 39 submit-OK); RETURN closed 02:50:24Z; TARGET 02:56:10Z; runner end 02:56:14Z. Mini READ 16 of 16.
+- Result: met ([counts/chain/FEE-STEP.md](counts/chain/FEE-STEP.md), [logs/LESSONS.md](logs/LESSONS.md), [counts/chain/FIRST-BEHIND.md](counts/chain/FIRST-BEHIND.md)).
+- Key 0 after the run: 89,421 usable tKAS in 2,156 coins over 3 tKAS, under the 2,500-coin line: split before the next open.

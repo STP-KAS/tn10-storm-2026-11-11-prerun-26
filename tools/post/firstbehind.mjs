@@ -1,4 +1,4 @@
-// firstbehind.mjs (pre-run 25, ops, after the tail): applies the first-behind rule fixed in locks/LOCKED.md (xxix) to the run's
+// firstbehind.mjs (pre-run 26: title, change text and the two guest matches; was pre-run 25, ops, after the tail): applies the first-behind rule fixed in locks/LOCKED.md (xxix) to the run's
 // own logs and prints counts/chain/FIRST-BEHIND.md. Read-only. Prints counts only (no id, key, address, host or port).
 // Usage: node firstbehind.mjs <run_dir> <repo_clone>
 import fs from "node:fs"; import path from "node:path";
@@ -25,7 +25,8 @@ for (const [k, x] of M) { const why = []; if (x.ok && x.landed < 0.9 * x.ok) why
 for (const r of mint) { const ms = Date.parse(r.ts); const x = M.get(mk(ms));
   if (r.result === "accepted") { if (x) { x.mintAcc++; x.mintMax = Math.max(x.mintMax, r.accept_ms || 0); } if ((r.accept_ms || 0) > 10000) behind.push({ comp: "mint line", minute: mk(ms), why: `a mint took ${fmt(r.accept_ms)} ms to accept` }); }
   else if (r.result === "accept_timeout" || r.result === "rejected") behind.push({ comp: "mint line", minute: mk(ms), why: r.result === "rejected" ? "a mint was rejected (text kept privately: " + String(r.reason || "").slice(0, 120) + ")" : "a mint accept timed out (120 s)" }); }
-if (GT.started && ((GT.not_accepted_steps || []).length || (GT.ttflow_exit ?? 0) !== 0)) behind.push({ comp: "guest", minute: mk(Date.parse(GT.confirmed_at || GT.started)), why: `${(GT.not_accepted_steps || []).length} logged carriers not among the desk node's accepted ids; ttflow exit ${GT.ttflow_exit}` });
+for (const x of [GT.a, GT.b]) if (x && ((x.not_accepted_steps || []).length || (x.ttflow_exit ?? 0) !== 0)) behind.push({ comp: "guest", minute: mk(Date.parse(x.confirmed_at || x.started)), why: `match ${x.label}: ${(x.not_accepted_steps || []).length} logged carriers not among the desk node's accepted ids; ttflow exit ${x.ttflow_exit}` });
+if (!GT.a && !GT.b && GT.started && ((GT.not_accepted_steps || []).length || (GT.ttflow_exit ?? 0) !== 0)) behind.push({ comp: "guest", minute: mk(Date.parse(GT.confirmed_at || GT.started)), why: `${(GT.not_accepted_steps || []).length} logged carriers not among the desk node's accepted ids; ttflow exit ${GT.ttflow_exit}` });
 behind.sort((a, b) => (a.minute < b.minute ? -1 : a.minute > b.minute ? 1 : 0));
 // load per minute from the desk's step files (probe table)
 const load = new Map();
@@ -33,12 +34,13 @@ for (const f of ["BASE", "HOLD-1", "HOLD-2", "HOLD-3", "HOLD-4", "RETURN"]) { co
   const rows = t.slice(i).split(/\r?\n/).filter((l) => l.startsWith("|")); const hdr = rows[0].split("|").map((s) => s.trim());
   const ci = (re) => hdr.findIndex((h) => re.test(h)); const cM = ci(/^Mempool$/), cR = ci(/^Ready \(no parent/), cF = ci(/^Fee estimate priority/);
   for (const r of rows.slice(2)) { const c = r.split("|").map((s) => s.trim()); const k = (c[1] || "").slice(0, 16); if (/^\d{4}-/.test(k)) load.set(k, { mempool: c[cM], ready: c[cR], fee: (c[cF] || "").split("/")[0].trim() }); } }
-const G = GT.started ? `${GT.accepted_on_desk || 0} of ${GT.ids_logged || 0} logged carriers accepted on the desk node (confirmed ${String(GT.confirmed_at || "-").slice(11, 19)}Z, step ${stepOf(Date.parse(GT.confirmed_at || GT.started))})` : "the guest kid did not start";
+const gx = (x, lab) => x ? `${lab} ${x.accepted_on_desk || 0} of ${x.ids_logged || 0} logged carriers accepted on the desk node (confirmed ${String(x.confirmed_at || "-").slice(11, 19)}Z, step ${stepOf(Date.parse(x.confirmed_at || x.started))})` : `${lab} did not start`;
+const G = (GT.a || GT.b) ? gx(GT.a, "match A") + "; " + gx(GT.b, "match B") : GT.started ? `${GT.accepted_on_desk || 0} of ${GT.ids_logged || 0} logged carriers accepted on the desk node (confirmed ${String(GT.confirmed_at || "-").slice(11, 19)}Z, step ${stepOf(Date.parse(GT.confirmed_at || GT.started))})` : "the guest kid did not start";
 const fb = behind[0];
 const offer = `${SENDER_FAMILIES} families × 1.2 hops a second offered (${fmt(SENDER_FAMILIES * 72)} a minute), the mint line one at a time, the guest one carrier at a time`;
 const L = ["> **Experimental. We are just trying this.** [Disclaimer](../../DISCLAIMER.md) · Kaspa Testnet-10 only; tKAS has no value. Counts only.", "",
-  "# First behind, pre-run 25", "",
-  "Written by ops after the tail, from the desk run's own logs (family sender submit rows, the coordinator's accepting-header times, the mint line's rows, the guest kid's totals) and the desk's step files, with the rule fixed before the arm in [locks/LOCKED.md](../../locks/LOCKED.md) (xxix). One knob was turned: the family count, 4 → 8.", "",
+  "# First behind, pre-run 26", "",
+  "Written by ops after the tail, from the desk run's own logs (family sender submit rows, the coordinator's accepting-header times, the mint line's rows, the guest kid's totals) and the desk's step files, with the rule fixed before the arm in [locks/LOCKED.md](../../locks/LOCKED.md) (xxix). One change: a held 2× fee step (the mix at 920 = 2 × our heavy lane's 460, HOLD-2 only) on pre-run 25's mix, with our own heavy lane on at ready cap 8 in HOLD-1 and HOLD-2.", "",
   fb ? `**First component behind: ${fb.comp}**, in the minute ${fb.minute}Z (${stepOf(Date.parse(fb.minute + ":00Z"))}): ${fb.why}. Load at that minute: ${offer}; desk mempool ${load.get(fb.minute)?.mempool ?? "-"}, ready ${load.get(fb.minute)?.ready ?? "-"}, fee estimate (priority) ${load.get(fb.minute)?.fee ?? "-"}.` : `**No component fell behind at this step.** Load: ${offer}.`, "",
   `Guest: ${G}. Mints: ${mint.filter((r) => r.result === "accepted").length} accepted, ${mint.filter((r) => r.result === "rejected").length} rejected, ${mint.filter((r) => r.result === "accept_timeout").length} accept timeouts; accept time max ${fmt(Math.max(0, ...mint.filter((r) => r.result === "accepted").map((r) => r.accept_ms || 0)))} ms.`, "",
   ...(behind.length ? ["Every mark under the rule, in time order:", "", "| Minute (UTC) | Component | Why |", "|---|---|---|", ...behind.slice(0, 40).map((b) => `| ${b.minute} | ${b.comp} | ${b.why} |`), behind.length > 40 ? `| … | | ${behind.length - 40} more |` : "", ""] : []),
