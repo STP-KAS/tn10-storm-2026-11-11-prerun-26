@@ -1,0 +1,5 @@
+> **Experimental. We are just trying this.** [Disclaimer](../../DISCLAIMER.md) · Kaspa Testnet-10 only.
+
+# Bot, pre-run 26: on the desk
+
+Standing rule from the operator (14 Nov 2026, 00:30 Brussels): heavy work runs on the desk; the bot's machine only coordinates (git, light reads, reports). In pre-run 24 the bot's machine stalled about 5 minutes and the bot read HOLD-3 245 s late. Since pre-run 24 retry 1 the bot's waiter, free check and HOLD-4 sender run on the desk as one process, [desk-bot.mjs](desk-bot.mjs), with its own clone. The rule is pre-run 24's, unchanged: HOLD-3 on origin, the pinned minute, a free check at pin minus 40 s, a send only on a free distinct public kaspad and only before the pin, at most 60 payments one at a time at 150 sompi/gram, else `NO SEND`. Own coins: one desk key (not keys 1–2), each payment a one-input sweep back to the same key. [render.mjs](render.mjs) now writes "NO SEND suspend" when a free node answered only after the minute had started (pre-run 24's lesson).
